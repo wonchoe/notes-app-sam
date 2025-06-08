@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple serverless notes API
+
+Resources:
+  NotesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Notes
+      AttributeDefinitions:
+        - AttributeName: noteId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: noteId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  NotesUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: notes-user-pool
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+
+  NotesApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Auth:
+        DefaultAuthorizer: CognitoAuthorizer
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: !GetAtt NotesUserPool.Arn
+
+  NotesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs20.x
+      CodeUri: src/
+      Environment:
+        Variables:
+          NOTES_TABLE: !Ref NotesTable
+      Events:
+        NotesApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref NotesApi
+            Path: /notes
+            Method: ANY
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref NotesTable

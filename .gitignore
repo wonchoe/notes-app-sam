@@ -1,0 +1,9 @@
+node_modules/
+.aws-sam/
+.env
+.env.*
+*.zip
+npm-debug.log*
+__tests__/
+.vscode/
+.idea/
