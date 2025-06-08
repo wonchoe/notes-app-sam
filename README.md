@@ -98,13 +98,6 @@ curl "https://<API-ID>.execute-api.<region>.amazonaws.com/prod/notes?noteId=note
 
 ---
 
-## Files
-
-- **template.yaml** — AWS SAM template describing all resources
-- **src/index.js** — Lambda function handler code
-
----
-
 ## TODO / Improvements
 
 - Add per-user note isolation (by storing notes with userId from Cognito token)
