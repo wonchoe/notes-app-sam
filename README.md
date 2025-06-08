@@ -8,11 +8,14 @@ The app demonstrates how to deploy a minimal API for notes, protected by Cognito
 ## Architecture
 
 - **API Gateway** — REST API secured with Cognito authorizer
+- **Cognito User Pool** — authentication and identity management for users
 - **AWS Lambda (Node.js)** — business logic for handling requests
 - **DynamoDB** — stores notes (single primary key: `noteId`)
-- **Cognito User Pool** — authentication and identity management for users
 
+<img src="diagrams/image.png">
 ---
+
+
 
 ## Deployment
 
